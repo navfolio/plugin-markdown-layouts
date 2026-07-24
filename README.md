@@ -47,17 +47,20 @@ export default defineConfig({
 显式填写时需要与列数一致。`ratio` 的数值数量也必须等于列数。
 
 ```md
-::: columns{cols=2 ratio="1:2"}
+::: columns{cols=2 ratio=1:2}
 
 ::: column
 
 ## 左侧摘要
 
 这里是普通 **Markdown** 内容。
+
 :::
 
 ::: column
+
 右侧可以包含更长的说明、列表或链接。
+
 :::
 
 :::
@@ -70,21 +73,25 @@ export default defineConfig({
 
 `media` 是列的内容语义，而不是另一种布局。它不会自动由图片推断，避免
 把普通截图或行内插图误判为媒体列。窄屏时默认按源码顺序堆叠；设置
-`mobile="media-first"` 后，媒体列会移至前面。
+`mobile=media-first` 后，媒体列会移至前面。
 
 ```md
-::: columns{cols=2 ratio="3:2" mobile="media-first"}
+::: columns{cols=2 ratio=3:2 mobile=media-first}
 
 ::: column
+
 _FIELD NOTE · 07_
 
 ## 在雾里记录颜色
 
 图片与说明可以共享一个阅读单元。
+
 :::
 
 ::: column{media}
+
 ![雾中的小屋](/images/field-note-07.jpg)
+
 :::
 
 :::
@@ -97,18 +104,20 @@ _FIELD NOTE · 07_
 ```md
 ::: timeline
 
-::: event{date="2024.06"}
+::: event{date=2024.06}
 
 ### 收集
 
 把零散的链接与观察整理成素材库。
+
 :::
 
-::: event{date="2025.01"}
+::: event{date=2025.01}
 
 ### 发布
 
 发布第一个公开、可阅读的版本。
+
 :::
 
 :::
@@ -118,21 +127,21 @@ _FIELD NOTE · 07_
 正文宽度时，浏览器会显示横向滚动条，而不是压缩文字或截断节点。
 
 ```md
-::: timeline{direction="horizontal"}
+::: timeline{direction=horizontal}
 
-::: event{date="2024.06"}
+::: event{date=2024.06}
 
 ### 收集
 
 :::
 
-::: event{date="2024.10"}
+::: event{date=2024.10}
 
 ### 成形
 
 :::
 
-::: event{date="2025.01"}
+::: event{date=2025.01}
 
 ### 发布
 

@@ -22,6 +22,10 @@ describe("parseLayoutMarker", () => {
       type: "timeline",
       attributes: { direction: "horizontal" },
     });
+    expect(parseLayoutMarker("::: columns{cols=2 ratio=1:2}")).toEqual({
+      type: "columns",
+      attributes: { cols: "2", ratio: "1:2" },
+    });
   });
 });
 
