@@ -125,4 +125,27 @@ describe("remarkLayouts", () => {
     expect(tree.children).toHaveLength(8);
     expect(tree.children[0]?.data).toBeUndefined();
   });
+
+  test("leaves a columns directive untouched when its declared count is malformed", () => {
+    for (const cols of ["0", "two", "2.5"]) {
+      const tree = {
+        type: "root",
+        children: [
+          paragraph(`::: columns{cols=${cols}}`),
+          paragraph("::: column"),
+          paragraph("First."),
+          paragraph(":::"),
+          paragraph("::: column"),
+          paragraph("Second."),
+          paragraph(":::"),
+          paragraph(":::"),
+        ],
+      };
+
+      remarkLayouts()(tree);
+
+      expect(tree.children).toHaveLength(8);
+      expect(tree.children[0]?.data).toBeUndefined();
+    }
+  });
 });

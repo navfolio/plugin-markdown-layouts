@@ -204,7 +204,10 @@ function parseColumns(
     if (isClosingMarker(children[index] ?? {})) {
       if (!columns.length) return undefined;
       const count = columns.length;
-      const declaredCount = positiveInteger(marker.attributes.cols);
+      const declaredCols = marker.attributes.cols;
+      const declaredCount = positiveInteger(declaredCols);
+      if (declaredCols !== undefined && declaredCount === undefined)
+        return undefined;
       if (declaredCount !== undefined && declaredCount !== count)
         return undefined;
       const resolvedCount = declaredCount ?? count;
