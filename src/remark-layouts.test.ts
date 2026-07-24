@@ -18,6 +18,10 @@ describe("parseLayoutMarker", () => {
       type: "column",
       attributes: { media: true },
     });
+    expect(parseLayoutMarker("::: timeline{direction=“horizontal”}")).toEqual({
+      type: "timeline",
+      attributes: { direction: "horizontal" },
+    });
   });
 });
 

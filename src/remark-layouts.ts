@@ -51,11 +51,20 @@ function parseAttributes(source = ""): Record<string, AttributeValue> {
     const quote = source[index];
     let value = "";
 
-    if (quote === '"' || quote === "'") {
+    const closingQuote =
+      quote === "“"
+        ? "”"
+        : quote === "‘"
+          ? "’"
+          : quote === '"' || quote === "'"
+            ? quote
+            : undefined;
+
+    if (closingQuote) {
       index += 1;
       const valueStart = index;
-      while (index < source.length && source[index] !== quote) index += 1;
-      if (source[index] !== quote) return {};
+      while (index < source.length && source[index] !== closingQuote) index += 1;
+      if (source[index] !== closingQuote) return {};
       value = source.slice(valueStart, index);
       index += 1;
     } else {
