@@ -34,11 +34,12 @@
   object-fit: cover;
 }
 
-.markdown-timeline {
+.markdown-timeline.is-horizontal {
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scrollbar-color: currentColor transparent;
   scrollbar-width: thin;
+  padding-inline: 6px;
 }
 
 .markdown-timeline-list {
