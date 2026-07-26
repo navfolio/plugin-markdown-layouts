@@ -9,23 +9,33 @@ function paragraph(value: string) {
 describe("parseLayoutMarker", () => {
   test("parses a directive and quoted attributes", () => {
     expect(
-      parseLayoutMarker('::: columns{cols=2 ratio="1:2" mobile="media-first"}'),
+      parseLayoutMarker('::: columns cols=2 ratio="1:2" mobile="media-first"'),
     ).toEqual({
       type: "columns",
       attributes: { cols: "2", ratio: "1:2", mobile: "media-first" },
     });
-    expect(parseLayoutMarker("::: column{media}")).toEqual({
+    expect(parseLayoutMarker("::: column media")).toEqual({
       type: "column",
       attributes: { media: true },
     });
-    expect(parseLayoutMarker("::: timeline{direction=“horizontal”}")).toEqual({
+    expect(parseLayoutMarker("::: timeline direction=“horizontal”")).toEqual({
       type: "timeline",
       attributes: { direction: "horizontal" },
     });
-    expect(parseLayoutMarker("::: columns{cols=2 ratio=1:2}")).toEqual({
+    expect(parseLayoutMarker("::: columns cols=2 ratio=1:2")).toEqual({
       type: "columns",
       attributes: { cols: "2", ratio: "1:2" },
     });
+  });
+
+  test("does not parse brace-wrapped attributes as MDX expressions", () => {
+    expect(parseLayoutMarker("::: columns{cols=2 ratio=1:2}")).toBeUndefined();
+    expect(parseLayoutMarker("::: columns {cols=2 ratio=1:2}")).toBeUndefined();
+    expect(parseLayoutMarker("::: column{media}")).toBeUndefined();
+    expect(
+      parseLayoutMarker("::: timeline{direction=horizontal}"),
+    ).toBeUndefined();
+    expect(parseLayoutMarker("::: event{date=2026.07}")).toBeUndefined();
   });
 });
 
@@ -34,11 +44,11 @@ describe("remarkLayouts", () => {
     const tree = {
       type: "root",
       children: [
-        paragraph('::: columns{cols=2 ratio="1:2" mobile="media-first"}'),
+        paragraph('::: columns cols=2 ratio="1:2" mobile="media-first"'),
         paragraph("::: column"),
         paragraph("Main content."),
         paragraph(":::"),
-        paragraph("::: column{media}"),
+        paragraph("::: column media"),
         paragraph("Image content."),
         paragraph(":::"),
         paragraph(":::"),
@@ -66,11 +76,11 @@ describe("remarkLayouts", () => {
     const tree = {
       type: "root",
       children: [
-        paragraph('::: timeline{direction="horizontal"}'),
-        paragraph('::: event{date="2026.07"}'),
+        paragraph('::: timeline direction="horizontal"'),
+        paragraph('::: event date="2026.07"'),
         paragraph("Released."),
         paragraph(":::"),
-        paragraph('::: event{date="2026.08"}'),
+        paragraph('::: event date="2026.08"'),
         paragraph("Documented."),
         paragraph(":::"),
         paragraph(":::"),
@@ -93,7 +103,7 @@ describe("remarkLayouts", () => {
     const tree = {
       type: "root",
       children: [
-        paragraph("::: columns{cols=2}"),
+        paragraph("::: columns cols=2"),
         paragraph("::: column"),
         paragraph("Missing close"),
       ],
@@ -109,7 +119,7 @@ describe("remarkLayouts", () => {
     const tree = {
       type: "root",
       children: [
-        paragraph('::: columns{cols=3 ratio="1:2"}'),
+        paragraph('::: columns cols=3 ratio="1:2"'),
         paragraph("::: column"),
         paragraph("First."),
         paragraph(":::"),
@@ -131,7 +141,7 @@ describe("remarkLayouts", () => {
       const tree = {
         type: "root",
         children: [
-          paragraph(`::: columns{cols=${cols}}`),
+          paragraph(`::: columns cols=${cols}`),
           paragraph("::: column"),
           paragraph("First."),
           paragraph(":::"),

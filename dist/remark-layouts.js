@@ -1,4 +1,4 @@
-const openingMarkerPattern = /^:::\s*(columns|column|timeline|event)(?:\{([^}]*)\})?\s*$/;
+const openingMarkerPattern = /^:::\s*(columns|column|timeline|event)(?:\s+(.+?))?\s*$/;
 const closingMarkerPattern = /^:::\s*$/;
 const attributeNamePattern = /[A-Za-z][\w-]*/y;
 function parseAttributes(source = "") {
@@ -12,7 +12,7 @@ function parseAttributes(source = "") {
         attributeNamePattern.lastIndex = index;
         const nameMatch = attributeNamePattern.exec(source);
         if (!nameMatch)
-            return {};
+            return undefined;
         const name = nameMatch[0];
         index = attributeNamePattern.lastIndex;
         while (/\s/.test(source[index] ?? ""))
@@ -39,7 +39,7 @@ function parseAttributes(source = "") {
             while (index < source.length && source[index] !== closingQuote)
                 index += 1;
             if (source[index] !== closingQuote)
-                return {};
+                return undefined;
             value = source.slice(valueStart, index);
             index += 1;
         }
@@ -49,7 +49,7 @@ function parseAttributes(source = "") {
                 index += 1;
             value = source.slice(valueStart, index);
             if (!value)
-                return {};
+                return undefined;
         }
         attributes[name] = value;
     }
@@ -67,7 +67,8 @@ export function parseLayoutMarker(value) {
     if (!match)
         return undefined;
     const type = match[1];
-    return { type, attributes: parseAttributes(match[2]) };
+    const attributes = parseAttributes(match[2]);
+    return attributes ? { type, attributes } : undefined;
 }
 function readLayoutMarker(node) {
     const value = paragraphText(node);

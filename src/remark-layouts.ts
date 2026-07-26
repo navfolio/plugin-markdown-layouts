@@ -21,11 +21,13 @@ type ParsedBlock = {
 };
 
 const openingMarkerPattern =
-  /^:::\s*(columns|column|timeline|event)(?:\{([^}]*)\})?\s*$/;
+  /^:::\s*(columns|column|timeline|event)(?:\s+(.+?))?\s*$/;
 const closingMarkerPattern = /^:::\s*$/;
 const attributeNamePattern = /[A-Za-z][\w-]*/y;
 
-function parseAttributes(source = ""): Record<string, AttributeValue> {
+function parseAttributes(
+  source = "",
+): Record<string, AttributeValue> | undefined {
   const attributes: Record<string, AttributeValue> = {};
   let index = 0;
 
@@ -35,7 +37,7 @@ function parseAttributes(source = ""): Record<string, AttributeValue> {
 
     attributeNamePattern.lastIndex = index;
     const nameMatch = attributeNamePattern.exec(source);
-    if (!nameMatch) return {};
+    if (!nameMatch) return undefined;
 
     const name = nameMatch[0];
     index = attributeNamePattern.lastIndex;
@@ -63,8 +65,9 @@ function parseAttributes(source = ""): Record<string, AttributeValue> {
     if (closingQuote) {
       index += 1;
       const valueStart = index;
-      while (index < source.length && source[index] !== closingQuote) index += 1;
-      if (source[index] !== closingQuote) return {};
+      while (index < source.length && source[index] !== closingQuote)
+        index += 1;
+      if (source[index] !== closingQuote) return undefined;
       value = source.slice(valueStart, index);
       index += 1;
     } else {
@@ -72,7 +75,7 @@ function parseAttributes(source = ""): Record<string, AttributeValue> {
       while (index < source.length && !/\s/.test(source[index] ?? ""))
         index += 1;
       value = source.slice(valueStart, index);
-      if (!value) return {};
+      if (!value) return undefined;
     }
 
     attributes[name] = value;
@@ -98,7 +101,8 @@ export function parseLayoutMarker(value: string): LayoutMarker | undefined {
   if (!match) return undefined;
 
   const type = match[1] as LayoutMarker["type"];
-  return { type, attributes: parseAttributes(match[2]) };
+  const attributes = parseAttributes(match[2]);
+  return attributes ? { type, attributes } : undefined;
 }
 
 function readLayoutMarker(node: MdastNode): LayoutMarker | undefined {

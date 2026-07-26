@@ -45,9 +45,11 @@ export default defineConfig({
 
 指令行和结束行必须单独占一段。`cols` 可省略并由 `column` 数量推断；
 显式填写时需要与列数一致。`ratio` 的数值数量也必须等于列数。
+属性直接写在指令名后，并用空格分隔；不要使用 `{}` 包裹属性，否则 MDX
+会把它当作 JavaScript 表达式交给 Acorn 解析。
 
 ```md
-::: columns{cols=2 ratio=1:2}
+::: columns cols=2 ratio=1:2
 
 ::: column
 
@@ -76,7 +78,7 @@ export default defineConfig({
 `mobile=media-first` 后，媒体列会移至前面。
 
 ```md
-::: columns{cols=2 ratio=3:2 mobile=media-first}
+::: columns cols=2 ratio=3:2 mobile=media-first
 
 ::: column
 
@@ -88,7 +90,7 @@ _FIELD NOTE · 07_
 
 :::
 
-::: column{media}
+::: column media
 
 ![雾中的小屋](/images/field-note-07.jpg)
 
@@ -104,7 +106,7 @@ _FIELD NOTE · 07_
 ```md
 ::: timeline
 
-::: event{date=2024.06}
+::: event date=2024.06
 
 ### 收集
 
@@ -112,7 +114,7 @@ _FIELD NOTE · 07_
 
 :::
 
-::: event{date=2025.01}
+::: event date=2025.01
 
 ### 发布
 
@@ -127,21 +129,21 @@ _FIELD NOTE · 07_
 正文宽度时，浏览器会显示横向滚动条，而不是压缩文字或截断节点。
 
 ```md
-::: timeline{direction=horizontal}
+::: timeline direction=horizontal
 
-::: event{date=2024.06}
+::: event date=2024.06
 
 ### 收集
 
 :::
 
-::: event{date=2024.10}
+::: event date=2024.10
 
 ### 成形
 
 :::
 
-::: event{date=2025.01}
+::: event date=2025.01
 
 ### 发布
 
